@@ -1,0 +1,272 @@
+/* ===============================
+   RESET + BASE
+================================*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background: #f7f7f7;
+  color: #222;
+  transition: background 0.4s ease, color 0.4s ease;
+  padding-bottom: 60px;
+}
+
+/* Smooth fade */
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===============================
+   HEADER
+================================*/
+.app-header {
+  background: rgba(255,255,255,0.65);
+  backdrop-filter: blur(12px);
+  padding: 20px 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.5);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.brand h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.subtitle {
+  font-size: 12px;
+  opacity: 0.7;
+  margin-top: 2px;
+}
+
+.theme-select-wrap {
+  margin-top: 12px;
+}
+
+select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #bbb;
+}
+
+/* ===============================
+   MAIN + CARDS
+================================*/
+.main {
+  padding: 20px 12px;
+}
+
+.card {
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(20px);
+  border-radius: 14px;
+  padding: 18px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.06);
+}
+
+.card h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+/* ===============================
+   BUTTONS
+================================*/
+.btn {
+  padding: 10px 16px;
+  margin: 6px;
+  border: none;
+  border-radius: 8px;
+  background: #222;
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  transition: transform 0.1s;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+}
+
+.btn.primary {
+  background: #5c00d6;
+}
+
+.controls {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.controls.exports {
+  margin-top: 18px;
+}
+
+/* ===============================
+   STATUS BAR
+================================*/
+.status {
+  margin-top: 14px;
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.08);
+}
+
+/* ===============================
+   GRID LAYOUT
+================================*/
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+}
+
+@media (min-width: 900px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.block {
+  background: rgba(255,255,255,0.30);
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.25);
+}
+
+/* Scroll areas */
+.scroll {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 10px;
+  background: rgba(255,255,255,0.5);
+  border-radius: 6px;
+  font-size: 12px;
+}
+
+.scroll.small {
+  max-height: 140px;
+}
+
+/* ===============================
+   TABLE (Items)
+================================*/
+.items-block table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.items-block th,
+.items-block td {
+  padding: 8px;
+  font-size: 13px;
+  border-bottom: 1px solid #ddd;
+}
+
+.items-block th {
+  text-align: left;
+  background: rgba(0,0,0,0.08);
+  font-weight: 600;
+}
+
+/* ===============================
+   HISTORY
+================================*/
+.history-box {
+  margin-top: 12px;
+  padding: 12px;
+  background: rgba(255,255,255,0.4);
+  border-radius: 8px;
+  max-height: 220px;
+  overflow-y: auto;
+  font-size: 13px;
+}
+
+/* ===============================
+   FOOTER
+================================*/
+.footer {
+  text-align: center;
+  padding: 20px;
+  font-size: 13px;
+  opacity: 0.6;
+}
+
+/* ===============================
+   PREMIUM THEMES (6)
+================================*/
+
+/* -------- 1. ROSE NEBULA -------- */
+.theme-rose {
+  background: linear-gradient(135deg, #fde2e4, #cdb4db);
+  color: #5d3a66;
+}
+.theme-rose .card { border-color: rgba(255,255,255,0.5); }
+
+/* -------- 2. LILAC GLOW -------- */
+.theme-lilac {
+  background: linear-gradient(135deg, #f3e5f5, #b76e79);
+  color: #333;
+}
+.theme-lilac .card { border-color: rgba(255,255,255,0.5); }
+
+/* -------- 3. COTTON CANDY SKY -------- */
+.theme-cotton {
+  background: linear-gradient(135deg, #ffd6e0, #e0bbe4);
+  color: #2c2c54;
+}
+.theme-cotton .card { border-color: rgba(255,255,255,0.5); }
+
+/* -------- 4. GALAXY GLITTER -------- */
+.theme-galaxy {
+  background: linear-gradient(135deg, #ede7f6, #ff6f91);
+  color: #3f51b5;
+}
+.theme-galaxy .card { border-color: rgba(255,255,255,0.5); }
+
+/* -------- 5. DREAMY BLUSH -------- */
+.theme-blush {
+  background: linear-gradient(135deg, #ffe5ec, #da70d6);
+  color: #8b3a62;
+}
+.theme-blush .card { border-color: rgba(255,255,255,0.5); }
+
+/* -------- 6. FAIRY DUST -------- */
+.theme-fairy {
+  background: linear-gradient(135deg, #fff0f5, #9370db);
+  color: #4a4a4a;
+}
+.theme-fairy .card { border-color: rgba(255,255,255,0.5); }
+
+/* Theme sparkles effect */
+body[class^="theme-"]::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle at random 20% 20%,
+    rgba(255,255,255,0.6) 1px,
+    transparent 3px
+  );
+  animation: sparkle 6s infinite linear;
+}
+
+@keyframes sparkle {
+  0% { opacity: 0.8; }
+  50% { opacity: 0.4; }
+  100% { opacity: 0.8; }
+}
