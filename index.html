@@ -1,152 +1,133 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>ME — ANJ Multi-Lang Invoice Intelligence Engine</title>
+  <title>ME — ANJ Multi-Lang Invoice Intelligence Engine (ULTRA)</title>
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#1b1020" />
 
-  <!-- LOCAL FILES YOU HAVE -->
-  <script src="libs/pdf.js"></script>
+  <!-- CDN Libraries (stable versions) -->
+  <!-- PDF.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.min.js"></script>
   <script>
-    pdfjsLib = window.pdfjsLib;
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'libs/pdf.worker.js';
+    pdfjsLib = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
+    pdfjsLib.GlobalWorkerOptions.workerSrc = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.2.67/pdf.worker.min.js";
   </script>
-  <script src="libs/ocr.js"></script>
 
-  <!-- MISSING LIBS LOADED FROM CDN (WORKS 100%) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.0.2/tesseract.min.js"></script>
+  <!-- Tesseract v5 -->
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5.3.0/dist/tesseract.min.js"></script>
+
+  <!-- html2canvas -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+  <!-- jsPDF UMD -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- JSZip -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 
-  <!-- STYLE (correct path for your repo) -->
-  <link rel="stylesheet" href="style.css" />
-</head>
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 
+  <!-- Lottie -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+</head>
 <body class="theme-rose">
 
-  <!-- HEADER -->
   <header class="app-header">
-    <div class="branding">
-      <div class="brand-left">
-        <div class="logo">ME</div>
-        <div class="title-wrap">
-          <h1 class="title">ME</h1>
-          <div class="subtitle">ANJ Multi-Lang Invoice Intelligence Engine</div>
-        </div>
+    <div class="brand-left">
+      <div class="logo">ME</div>
+      <div class="title-group">
+        <h1>ME</h1>
+        <div class="subtitle">Multi-Lang Invoice Intelligence Engine — ULTRA</div>
       </div>
-
-      <div class="brand-right">
-        <label for="themeSelect" class="theme-label">Theme</label>
-        <select id="themeSelect" class="theme-select">
-          <option value="rose">Rose Nebula</option>
-          <option value="lilac">Lilac Glow</option>
-          <option value="cotton">Cotton Candy Sky</option>
-          <option value="galaxy">Galaxy Glitter</option>
-          <option value="blush">Dreamy Blush</option>
-          <option value="fairy">Fairy Dust</option>
-        </select>
-      </div>
+    </div>
+    <nav class="top-nav">
+      <a href="#/">Dashboard</a>
+      <a href="#/upload">Upload</a>
+      <a href="#/live">Live OCR</a>
+      <a href="#/history">History</a>
+      <a href="#/assistant">Assistant</a>
+      <a href="#/translate">Translate</a>
+      <a href="#/settings">Settings</a>
+      <a href="#/help">Help</a>
+    </nav>
+    <div class="header-right">
+      <select id="themeSelect" aria-label="Theme select">
+        <option value="rose">Rose Nebula</option>
+        <option value="lilac">Lilac Glow</option>
+        <option value="cotton">Cotton Candy Sky</option>
+        <option value="galaxy">Galaxy Glitter</option>
+        <option value="blush">Dreamy Blush</option>
+        <option value="fairy">Fairy Dust</option>
+      </select>
+      <button id="installPwa" class="btn small">Install</button>
     </div>
   </header>
 
-  <!-- MAIN -->
-  <main class="container">
-
-    <!-- UPLOAD -->
-    <section class="card upload-card">
-      <div class="section-head">
-        <h2>1 • Upload Invoice / Receipt</h2>
-      </div>
-
-      <div class="file-row">
-        <input id="fileInput" type="file" accept=".pdf,image/*,.txt" />
-        <div class="hint">Supported: PDF, PNG, JPG, TXT</div>
-      </div>
-
-      <div class="controls">
-        <button id="dualOCRBtn" class="btn glow">Dual OCR</button>
-        <button id="ocrOnlyBtn" class="btn">Quick OCR</button>
-        <button id="parseBtn" class="btn primary">Parse</button>
-      </div>
-
-      <div id="statusBar" class="status-bar">Ready ✓</div>
-    </section>
-
-    <!-- PREVIEW -->
-    <section id="previewContainer" class="card preview-card">
-      <div class="section-head">
-        <h2>2 • Extracted Preview</h2>
-      </div>
-
-      <div class="grid">
-
-        <div class="block summary">
-          <h3>Summary</h3>
-          <div class="row"><span class="label">Merchant</span><span id="merchant" class="value">-</span></div>
-          <div class="row"><span class="label">Date</span><span id="date" class="value">-</span></div>
-          <div class="row"><span class="label">Total</span><span id="total" class="value">-</span></div>
-          <div class="row"><span class="label">Confidence</span><span id="confidence" class="value">-</span></div>
-          <div class="row"><span class="label">Category</span><span id="category" class="value">-</span></div>
-        </div>
-
-        <div class="block items">
-          <h3>Items</h3>
-          <table class="items-table"><tbody id="itemsTable"></tbody></table>
-        </div>
-
-        <div class="block">
-          <h3>Raw OCR Text</h3>
-          <pre id="rawText" class="scroll">-</pre>
-        </div>
-
-        <div class="block">
-          <h3>Cleaned Text</h3>
-          <pre id="cleanedText" class="scroll">-</pre>
-        </div>
-
-        <div class="block">
-          <h3>Parse Issues</h3>
-          <div id="issuesBox" class="scroll small">-</div>
-        </div>
-
-        <div class="block">
-          <h3>JSON Preview</h3>
-          <pre id="jsonPreview" class="scroll">-</pre>
-        </div>
-
-      </div>
-
-      <div class="controls export-row">
-        <button id="exportJsonBtn" class="btn">Export JSON</button>
-        <button id="exportTxtBtn" class="btn">Export TXT</button>
-        <button id="exportCsvBtn" class="btn">Export CSV</button>
-        <button id="exportPdfBtn" class="btn">Export PDF</button>
-        <button id="exportZipBtn" class="btn glow">Export ZIP</button>
-      </div>
-    </section>
-
-    <!-- HISTORY -->
-    <section class="card history-card">
-      <div class="section-head">
-        <h2>3 • History</h2>
-      </div>
-
-      <div class="controls history-controls">
-        <button id="loadHistoryBtn" class="btn">Load History</button>
-        <button id="clearHistoryBtn" class="btn danger">Clear History</button>
-      </div>
-
-      <div id="historyList" class="history-box">No history yet.</div>
-    </section>
-
+  <main id="app" class="main-root">
+    <!-- SPA views inserted here by script.js -->
   </main>
 
-  <footer class="footer">ME — ANJ Creator Hub © 2025</footer>
+  <footer class="footer">
+    ME — ANJ Creator Hub © 2025 · Level 3 ULTRA
+  </footer>
 
-  <!-- YOUR WORKING JS FILE -->
+  <!-- Lightweight debug panel for mobile (always available) -->
+  <div id="anjDebug" aria-hidden="false">
+    <header><strong>ANJ Debug</strong>
+      <div class="dbg-controls">
+        <button id="anjDbgClear">Clear</button>
+        <button id="anjDbgToggle">Hide</button>
+      </div>
+    </header>
+    <div id="anjLog" class="dbg-area"></div>
+    <div class="dbg-footer">
+      <button id="anjCheckLibs" class="btn tiny">Check libs</button>
+      <span id="anjLibStatus" class="small">libs: unknown</span>
+    </div>
+  </div>
+
+  <!-- Main app script (paste the script.js chunks into script.js file) -->
   <script src="script.js"></script>
+
+  <script>
+    // Debug panel helpers: make visible ASAP
+    (function(){
+      function append(msg, cls){
+        const el = document.getElementById('anjLog');
+        if(!el) return;
+        const d = document.createElement('div'); d.className = cls||'';
+        d.textContent = (new Date()).toLocaleTimeString() + ' — ' + msg;
+        el.prepend(d);
+      }
+      window._ANJ = window._ANJ || {};
+      window._ANJ.debug = (label, data) => { append(label + (data!==undefined?(' : '+ (typeof data==='object'?JSON.stringify(data):String(data))):'')); console.log('[ANJ]', label, data); };
+      document.getElementById('anjDbgClear').onclick = ()=> { document.getElementById('anjLog').innerHTML=''; };
+      document.getElementById('anjDbgToggle').onclick = ()=>{
+        const panel = document.getElementById('anjDebug');
+        if(panel.classList.contains('collapsed')){ panel.classList.remove('collapsed'); document.getElementById('anjDbgToggle').textContent='Hide'; }
+        else { panel.classList.add('collapsed'); document.getElementById('anjDbgToggle').textContent='Show'; }
+      };
+      document.getElementById('anjCheckLibs').addEventListener('click', ()=>{
+        const libs = {
+          pdfjs: !!window.pdfjsLib,
+          tesseract: !!window.Tesseract,
+          html2canvas: !!window.html2canvas,
+          jspdf: !!window.jspdf,
+          jszip: !!window.JSZip,
+          chartjs: !!window.Chart,
+          lottie: !!window.lottie
+        };
+        document.getElementById('anjLibStatus').textContent = Object.entries(libs).map(x=>x[0]+':'+(x[1]?'ok':'missing')).join(' | ');
+        window._ANJ.debug('lib-check', libs);
+      });
+      setTimeout(()=>document.getElementById('anjCheckLibs').click(),800);
+    })();
+  </script>
 
 </body>
 </html>
