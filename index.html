@@ -6,21 +6,24 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <meta name="theme-color" content="#1b1020" />
 
-  <!-- Local libs (place files into /libs) -->
-  <script src="libs/pdf.min.js"></script>
+  <!-- ===== LIBRARIES (CDN VERSIONS) ===== -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
-    pdfjsLib = window.pdfjsLib || window['pdfjs-dist/build/pdf'];
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'libs/pdf.worker.min.js';
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
   </script>
-  <script src="libs/tesseract.min.js"></script>
-  <script src="libs/html2canvas.min.js"></script>
-  <script src="libs/jspdf.umd.min.js"></script>
-  <script src="libs/jszip.min.js"></script>
 
-  <!-- Core styles -->
-  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <!-- Local styling -->
+  <link rel="stylesheet" href="style.css" />
 </head>
+
 <body class="theme-rose">
+
   <header class="app-header">
     <div class="branding">
       <div class="brand-left">
@@ -48,14 +51,10 @@
   <main class="container">
 
     <section class="card upload-card">
-      <div class="section-head">
-        <h2>1 • Upload Invoice / Receipt</h2>
-      </div>
+      <h2>1 • Upload Invoice / Receipt</h2>
 
-      <div class="file-row">
-        <input id="fileInput" type="file" accept=".pdf,image/*,.txt" />
-        <div class="hint">Supported: PDF, PNG, JPG, TXT — choose a clear image for best results</div>
-      </div>
+      <input id="fileInput" type="file" accept=".pdf,image/*,.txt" />
+      <div class="hint">PDF, PNG, JPG, TXT supported</div>
 
       <div class="controls">
         <button id="dualOCRBtn" class="btn glow">Dual OCR</button>
@@ -67,51 +66,45 @@
     </section>
 
     <section id="previewContainer" class="card preview-card">
-      <div class="section-head">
-        <h2>2 • Extracted Preview</h2>
-      </div>
+      <h2>2 • Extracted Preview</h2>
 
       <div class="grid">
 
         <div class="block summary">
           <h3>Summary</h3>
-          <div class="row"><span class="label">Merchant</span><span id="merchant" class="value">-</span></div>
-          <div class="row"><span class="label">Date</span><span id="date" class="value">-</span></div>
-          <div class="row"><span class="label">Total</span><span id="total" class="value">-</span></div>
-          <div class="row"><span class="label">Confidence</span><span id="confidence" class="value">-</span></div>
-          <div class="row"><span class="label">Category</span><span id="category" class="value">-</span></div>
+          <div class="row"><span>Merchant</span><span id="merchant">-</span></div>
+          <div class="row"><span>Date</span><span id="date">-</span></div>
+          <div class="row"><span>Total</span><span id="total">-</span></div>
+          <div class="row"><span>Confidence</span><span id="confidence">-</span></div>
+          <div class="row"><span>Category</span><span id="category">-</span></div>
         </div>
 
         <div class="block items">
           <h3>Items</h3>
-          <div class="table-wrap">
-            <table class="items-table">
-              <thead>
-                <tr><th>Name</th><th>Qty</th><th>Price</th><th>Total</th></tr>
-              </thead>
-              <tbody id="itemsTable"></tbody>
-            </table>
-          </div>
+          <table>
+            <thead><tr><th>Name</th><th>Qty</th><th>Price</th><th>Total</th></tr></thead>
+            <tbody id="itemsTable"></tbody>
+          </table>
         </div>
 
         <div class="block">
           <h3>Raw OCR Text</h3>
-          <pre id="rawText" class="scroll">-</pre>
+          <pre id="rawText">-</pre>
         </div>
 
         <div class="block">
           <h3>Cleaned Text</h3>
-          <pre id="cleanedText" class="scroll">-</pre>
+          <pre id="cleanedText">-</pre>
         </div>
 
         <div class="block">
           <h3>Parse Issues</h3>
-          <div id="issuesBox" class="scroll small">-</div>
+          <pre id="issuesBox">-</pre>
         </div>
 
         <div class="block">
           <h3>JSON Preview</h3>
-          <pre id="jsonPreview" class="scroll">-</pre>
+          <pre id="jsonPreview">-</pre>
         </div>
 
       </div>
@@ -126,26 +119,22 @@
     </section>
 
     <section class="card history-card">
-      <div class="section-head">
-        <h2>3 • History</h2>
-      </div>
+      <h2>3 • History</h2>
 
-      <div class="controls history-controls">
-        <button id="loadHistoryBtn" class="btn">Load History</button>
-        <button id="clearHistoryBtn" class="btn danger">Clear History</button>
-      </div>
+      <button id="loadHistoryBtn" class="btn">Load History</button>
+      <button id="clearHistoryBtn" class="btn danger">Clear</button>
 
       <div id="historyList" class="history-box">No history yet.</div>
     </section>
 
   </main>
 
-  <footer class="footer">ME — ANJ Creator Hub © 2025</footer>
+  <footer class="footer">
+    ME — ANJ Creator Hub © 2025
+  </footer>
 
-  <!-- App scripts (core logic) -->
-  <script src="libs/ocr.js"></script>
-  <script src="libs/parser.js"></script>
-  <script src="libs/storage.js"></script>
-  <script src="js/script.js"></script>
+  <!-- Your app JS -->
+  <script src="script.js"></script>
+
 </body>
 </html>
